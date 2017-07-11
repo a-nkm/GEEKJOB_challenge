@@ -1,0 +1,4 @@
+MacBook Pro(Retina, 13-inch, Late 2013)
+プロセッサ：2.4GHz Intel Core i5
+メモリ：8GB 1600 MHz DDR3
+HDD：251GBフラッシュストレージ

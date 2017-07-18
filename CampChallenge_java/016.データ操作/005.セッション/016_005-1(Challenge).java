@@ -1,12 +1,6 @@
 /*
-005-2引数・戻り値
-引数が１つのメソッドを作成してください。
-メソッドの中の処理は、３人分のプロフィール（項目は戻り値2と同様）を作成し、引数として渡された値と
-同じIDを持つ人物のプロフィールを返却する様にしてください。
-それ以降は課題「戻り値2」と同じ処理にしてください。
-004-2戻り値
-1.戻り値：人物のID,名前,生年月日,住所を配列にして返却するメソッド作成
-2.作成したメソッドを呼び出し、戻り値のID以外を表示
+016.005-1
+セッションに現在時刻を記録し、次にアクセスした際に、前回記録した日時を表示。
 */
 package org.camp.servlet;
 
@@ -17,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
@@ -25,45 +21,6 @@ import java.text.SimpleDateFormat;
  * @author a-nkm
  */
 public class Challenge extends HttpServlet {
-
-    //戻り値：人物のID,名前,生年月日,住所を配列にして返却
-    ArrayList makeProfile(int id,String name,Calendar birthday,String address){
-        ArrayList<String> list = new ArrayList<>();
-        String Id = String.valueOf(id);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
-        String Birthday = sdf.format(birthday.getTime());
-        
-        list.add(Id);
-        list.add(name);
-        list.add(Birthday);
-        list.add(address);
-        return list;
-    }
-    
-     //プロフィールの作成と指定idの配列を返却
-    ArrayList findProfile(int num){
-        //プロフィール3つ作成
-        int[] id = {1,2,3};
-        String[] name = {"a","b","c"};
-        Calendar[] birthday = new Calendar[3];
-            birthday[0] = Calendar.getInstance();
-            birthday[1] = Calendar.getInstance();
-            birthday[2] = Calendar.getInstance();
-            
-            birthday[0].set(1993, 11-1, 24);
-            birthday[1].set(2013, 1-1, 11);
-            birthday[2].set(2017, 6-1, 16);     
-        String[] address ={"tokyo","mie","saitama"};
-        ArrayList<ArrayList> List = new ArrayList<>();
-        for(int i=0;i<3;i++){
-            List.add(makeProfile(id[i],name[i],birthday[i],address[i]));
-        }
-        if(num<=3&&num>0){
-            return List.get(num-1);
-        } else{
-        return null;
-        }       
-    }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -75,13 +32,18 @@ public class Challenge extends HttpServlet {
             out.println("<title>Servlet Challenge</title>");            
             out.println("</head>");
             out.println("<body>");
-            //探すid番号（1~3)
-            int fid = 3;
-            ArrayList<String> list;
-            list = findProfile(fid);
-            for(int i=1;i<4;i++){
-                out.println(list.get(i));
-            }
+            // セッションへ現在時刻を記録し、前回記録した日時を表示
+            // セッションの場合は即更新のため実行順に注意
+            Date now = new Date();
+            SimpleDateFormat sdf= new SimpleDateFormat("yyyy/M/d H:mm:ss");
+            HttpSession hs = request.getSession();
+            // セッションから前回の情報を取得 
+            String LastLogin = (String)hs.getAttribute("LastLogin");
+            out.print("前回のログイン時間：" + LastLogin +"<br>");          
+            // セッションへ今回の情報登録
+            hs.setAttribute("LastLogin",sdf.format(now));
+            LastLogin = (String)hs.getAttribute("LastLogin");
+            out.print("今回のログイン時間：" + LastLogin +"<br>");
             
             out.println("</body>");
             out.println("</html>");

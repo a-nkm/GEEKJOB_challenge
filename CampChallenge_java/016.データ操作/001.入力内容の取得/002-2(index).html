@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--
+016-1 入力フィールド
+以下の入力フィールドを持ったHTMLを、Javaで処理する想定で記述してください。
+・名前（テキストボックス）、性別（ラジオボタン）、趣味（複数行テキストボックス）
+-->
+<html>
+  <head>
+    <title>課題016-1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <form action="./challengejsp.jsp" method="post">
+      <!-- formタグで括られた入力項目はこれら -->
+      名前:
+      <input type="text" name="Name">
+      <br>
+      性別:
+      男<input type="radio" name="Sex" value="男性">
+      女<input type="radio" name="Sex" value="女性">
+      <br>
+      趣味：
+      <textarea name="Hobby"></textarea>   
+      <br>
+      <input type="submit" name="btnSubmit">
+      <br>
+    </form>
+  </body>
+</html>

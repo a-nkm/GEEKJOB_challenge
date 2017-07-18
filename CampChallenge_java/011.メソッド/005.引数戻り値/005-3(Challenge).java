@@ -1,5 +1,11 @@
 /*
-005-2引数・戻り値
+005-3
+課題「引数、戻り値2」の処理において、Integer limit=2を用意し、limitを利用して２名のプロフィール表示までで停止する様に処理を実装してください。
+005-2
+課題「引数、戻り値1」の3人分のプロフィールのうち、1人だけ住所の値をnullで定義し、
+ループ処理で全員分のプロフィールをid以外表示する処理を作成してください。
+この際、nullになっているデータはcontinueで飛ばしながら表示してください。
+005-1引数・戻り値
 引数が１つのメソッドを作成してください。
 メソッドの中の処理は、３人分のプロフィール（項目は戻り値2と同様）を作成し、引数として渡された値と
 同じIDを持つ人物のプロフィールを返却する様にしてください。
@@ -39,10 +45,8 @@ public class Challenge extends HttpServlet {
         list.add(address);
         return list;
     }
-    
-     //プロフィールの作成と指定idの配列を返却
-    ArrayList findProfile(int num){
-        //プロフィール3つ作成
+    //プロフィールの作成
+    ArrayList listProfile(){
         int[] id = {1,2,3};
         String[] name = {"a","b","c"};
         Calendar[] birthday = new Calendar[3];
@@ -53,17 +57,14 @@ public class Challenge extends HttpServlet {
             birthday[0].set(1993, 11-1, 24);
             birthday[1].set(2013, 1-1, 11);
             birthday[2].set(2017, 6-1, 16);     
-        String[] address ={"tokyo","mie","saitama"};
+        String[] address ={"tokyo",null,"saitama"};
         ArrayList<ArrayList> List = new ArrayList<>();
         for(int i=0;i<3;i++){
             List.add(makeProfile(id[i],name[i],birthday[i],address[i]));
         }
-        if(num<=3&&num>0){
-            return List.get(num-1);
-        } else{
-        return null;
-        }       
+        return List;
     }
+
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -75,12 +76,20 @@ public class Challenge extends HttpServlet {
             out.println("<title>Servlet Challenge</title>");            
             out.println("</head>");
             out.println("<body>");
-            //探すid番号（1~3)
-            int fid = 3;
-            ArrayList<String> list;
-            list = findProfile(fid);
-            for(int i=1;i<4;i++){
-                out.println(list.get(i));
+            //List作成
+            ArrayList<ArrayList> List = new ArrayList<>();
+            List = listProfile();
+            String p;
+            Integer limit=2;
+
+            for(int i=0;i<limit;i++){
+                for(int j=1;j<4;j++){
+                    p = (String)List.get(i).get(j);
+                    if(p==null)
+                        continue;
+                    out.println(p);
+                }
+                out.println("<br>");
             }
             
             out.println("</body>");
